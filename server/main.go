@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	fs := http.FileServer(http.Dir("../model"))
+	fs := http.FileServer(http.Dir("../jsmodel"))
 
 	log.Fatal(http.ListenAndServe(":9000", fs))
 }
