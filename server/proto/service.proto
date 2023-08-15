@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package ImageSearch.server;
+
+option go_package = "github.com/yeaung276/ImageSearch/server";
+
+import "google/api/annotations.proto";
+
+message ImageEmbedding {
+    repeated float embeddings = 1 [packed=true];
+}
+
+message ImageResult {
+    string url = 1;
+    float similarity = 2;
+}
+
+message ImageSearchResponse {
+    repeated ImageResult result = 1;
+}
+
+service ImageSearchService {
+    rpc Search (ImageEmbedding) returns (ImageSearchResponse){
+        option (google.api.http) = {
+            post: "/v1/search"
+            body: "*"
+        };
+    };
+}
