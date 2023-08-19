@@ -5,24 +5,37 @@ package ImageSearch.server;
 option go_package = "github.com/yeaung276/ImageSearch/server";
 
 import "google/api/annotations.proto";
-
-message ImageEmbedding {
-    repeated float embeddings = 1 [packed=true];
-}
+import "google/protobuf/empty.proto";
 
 message ImageResult {
     string url = 1;
     float similarity = 2;
 }
 
+message ImageSearchRequest {
+    repeated float embeddings = 1 [packed=true];
+}
+
 message ImageSearchResponse {
     repeated ImageResult result = 1;
+    int32 resultCount = 2;
+}
+
+message ImageAddRequest {
+    repeated float embeddings = 1 [packed=true];
+    string imageUrl = 2;
 }
 
 service ImageSearchService {
-    rpc Search (ImageEmbedding) returns (ImageSearchResponse){
+    rpc Search (ImageSearchRequest) returns (ImageSearchResponse){
         option (google.api.http) = {
             post: "/v1/search"
+            body: "*"
+        };
+    };
+    rpc Add (ImageAddRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            post: "/v1/add"
             body: "*"
         };
     };
