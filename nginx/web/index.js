@@ -59,7 +59,12 @@ class App{
     }
 
     async __searchImage(encoding){
-        console.log(encoding)
+        fetch('http://localhost:50052/v1/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                embeddings: encoding[0]
+            })
+        })
     }
 
     onFileSelect(e){
