@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/rs/cors"
 	"github.com/yeaung276/ImageSearch/server/milvus"
 	pb "github.com/yeaung276/ImageSearch/server/pb"
 	"google.golang.org/grpc"
@@ -39,7 +40,7 @@ func NewService(ctx context.Context, opt Option) (*Service, error) {
 		return nil, errors.New("Error connecting to milvus server")
 	}
 
-	srv, err := NewImageSearchServer(db)
+	srv, err := NewImageSearchServer(db, opt)
 	return &Service{
 		GrpcAddress: opt.GrpcAddress,
 		HTTPAddress: opt.HTTPAddress,
@@ -66,12 +67,13 @@ func (s *Service) ServeGrpc(ctx context.Context) error {
 
 func (s *Service) ServeHttp(ctx context.Context) error {
 	mux := runtime.NewServeMux()
+	handler := cors.Default().Handler(mux)
 	if err := pb.RegisterImageSearchServiceHandlerServer(ctx, mux, s.srv); err != nil {
 		log.Fatal("Error registering Http handler")
 		return err
 	}
 	log.Printf("Serving http server at %s", s.HTTPAddress)
-	if err := http.ListenAndServe(s.HTTPAddress, mux); err != nil {
+	if err := http.ListenAndServe(s.HTTPAddress, handler); err != nil {
 		log.Fatal("Error serving http server")
 		return err
 	}

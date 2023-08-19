@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.2
 	github.com/milvus-io/milvus-sdk-go/v2 v2.2.7
+	github.com/rs/cors v1.9.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230726155614-23370e0ffb3e
 	google.golang.org/grpc v1.57.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0

@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/yeaung276/ImageSearch/server/service"
 )
@@ -11,12 +13,13 @@ import (
 var opt service.Option
 
 func init() {
+	vs, _ := strconv.Atoi(os.Getenv("VECTOR_SIZE"))
 	opt = service.Option{
-		DBUrl:          "localhost:19530",
-		CollectionName: "image_search",
-		VectorSize:     2,
-		GrpcAddress:    "0.0.0.0:50051",
-		HTTPAddress:    "0.0.0.0:50052",
+		DBUrl:          os.Getenv("MILVUS_URL"),
+		CollectionName: os.Getenv("COLLECTION_NAME"),
+		VectorSize:     vs,
+		GrpcAddress:    os.Getenv("GRPC_ADDRESS"),
+		HTTPAddress:    os.Getenv("HTTP_ADDRESS"),
 	}
 }
 

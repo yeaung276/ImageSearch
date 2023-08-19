@@ -13,17 +13,19 @@ import (
 
 type ImageSearchServer struct {
 	pb.ImageSearchServiceServer
-	db *milvus.MilvusDB
+	db         *milvus.MilvusDB
+	vectorSize int
 }
 
-func NewImageSearchServer(db *milvus.MilvusDB) (*ImageSearchServer, error) {
+func NewImageSearchServer(db *milvus.MilvusDB, option Option) (*ImageSearchServer, error) {
 	return &ImageSearchServer{
-		db: db,
+		db:         db,
+		vectorSize: option.VectorSize,
 	}, nil
 }
 
 func (s *ImageSearchServer) Search(ctx context.Context, req *pb.ImageSearchRequest) (*pb.ImageSearchResponse, error) {
-	if len(req.Embeddings) != 2 {
+	if len(req.Embeddings) != s.vectorSize {
 		return nil, grpcstatus.Error(grpccodes.InvalidArgument, "Vector size mismatch")
 	}
 	r, err := s.db.SearchImages(ctx, req.Embeddings)
@@ -42,7 +44,7 @@ func (s *ImageSearchServer) Search(ctx context.Context, req *pb.ImageSearchReque
 }
 
 func (s *ImageSearchServer) Add(ctx context.Context, req *pb.ImageAddRequest) (*emptypb.Empty, error) {
-	if len(req.Embeddings) != 2 {
+	if len(req.Embeddings) != s.vectorSize {
 		return nil, grpcstatus.Error(grpccodes.InvalidArgument, "Vector size mismatch")
 	}
 
