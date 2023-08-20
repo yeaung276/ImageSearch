@@ -65,8 +65,11 @@ services:
     ports:
       - "50051:50051"
       - "50052:50052"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/nginx:/upload
     depends_on:
       - "standalone"
+
   nginx: 
     container_name: nginx-web
     build: 
@@ -74,6 +77,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/nginx:/upload
 
 networks:
   default:

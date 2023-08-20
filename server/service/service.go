@@ -3,9 +3,12 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
+	"io"
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/cors"
@@ -73,6 +76,7 @@ func (s *Service) ServeHttp(ctx context.Context) error {
 		return err
 	}
 	log.Printf("Serving http server at %s", s.HTTPAddress)
+	mux.HandlePath("POST", "/uploadFile", uploadFile)
 	if err := http.ListenAndServe(s.HTTPAddress, handler); err != nil {
 		log.Fatal("Error serving http server")
 		return err
@@ -85,4 +89,31 @@ func (s *Service) Shutdown(ctx context.Context) error {
 		return err
 	}
 	return nil
+}
+
+func uploadFile(w http.ResponseWriter, r *http.Request, params map[string]string) {
+	//upload size
+	err := r.ParseForm() // grab the multipart form
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to parse form: %s", err.Error()), http.StatusBadRequest)
+		return
+	}
+
+	f, header, err := r.FormFile("attachment")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to get file 'attachment': %s", err.Error()), http.StatusBadRequest)
+		return
+	}
+	defer f.Close()
+
+	resFile, err := os.Create("/upload/" + header.Filename)
+	if err != nil {
+		fmt.Fprintln(w, err)
+	}
+	defer resFile.Close()
+	if err == nil {
+		io.Copy(resFile, f)
+		defer resFile.Close()
+		fmt.Fprintf(w, "Successfully Uploaded Original File\n")
+	}
 }

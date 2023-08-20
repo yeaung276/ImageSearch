@@ -22,8 +22,15 @@ class App{
 
     async __loadModel(){
         this.showLoading()
-        this.model = await tf.loadGraphModel('../jsmodel/model.json');
-        this.hideLoading()
+        try{
+            this.model = await tf.loadGraphModel('../jsmodel/model.json');
+            this.setError("")
+        } catch(e){
+            this.setError(e)
+            console.error(e)
+        } finally{
+            this.hideLoading()
+        }
     }
 
     showLoading(){
@@ -32,6 +39,10 @@ class App{
 
     hideLoading(){
         document.getElementById('loading').style.display = 'none'
+    }
+
+    setError(message){
+        document.getElementById('err-msg').innerText = message
     }
 
     startCropper(image){
@@ -59,12 +70,16 @@ class App{
     }
 
     async __searchImage(encoding){
-        fetch('http://localhost:50052/v1/search', {
+        return fetch('http://localhost:50052/v1/search', {
             method: 'POST',
             body: JSON.stringify({
                 embeddings: encoding[0]
             })
         })
+    }
+
+    async __uploadImage(encoding){
+        console.log(encoding)
     }
 
     onFileSelect(e){
@@ -81,9 +96,16 @@ class App{
         document.getElementById('search-img').src = dataURL
         document.getElementById('file').disabled = false
         this.showLoading()
-        const encoding = await this.__getEncoding(canvas)
-        const result = await this.__searchImage(encoding)
-        this.hideLoading()
+        try{
+            const encoding = await this.__getEncoding(canvas)
+            const result = await (TAB==="Search"?this.__searchImage:this.__uploadImage)(encoding)
+            this.setError("")
+        } catch(e){
+            console.error(e)
+            this.setError(e)
+        } finally{
+            this.hideLoading()
+        }
     }
 }
 

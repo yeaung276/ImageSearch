@@ -2,13 +2,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" integrity="sha512-cyzxRvewl+FOKTtpBzYjW6x6IAYUCZy3sGP40hn+DQkqeluGRCax7qztK2ImL64SA+C7kVWdLI6wvdlStawhyw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="index.css"/>
     <body>
-        <div>
-            <input id="file" type="file" />
-            <button id="search">Search</button>
+        <div class="error" id="err-msg">This log error</div>
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'Search')">Search</button>
+            <button class="tablinks" onclick="openTab(event, 'Upload')">Upload</button>
         </div>
-        <div>
-            <img style="max-width: 100%" id="search-img" />
+        <div class="search-container">
+            <div>
+                <label>Choose file</label>
+                <input class="file-input" id="file" type="file" />
+                <button class="search-btn" id="search">Submit</button>
+            </div>
+            <div class="item-center">
+                <img style="max-width: 100%" id="search-img" />
+            </div>
         </div>
+
+        <div id="Search" class="tabcontent">
+            <h3>Search result</h3>
+        </div>
+        
+        <div id="Upload" class="tabcontent" style="display: none">
+            <h3>Upload result</h3>
+            <p>Paris is the capital of France.</p> 
+        </div>
+
         <div class="loading" id="loading">
             Loading...
         </div>
@@ -16,4 +34,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js" integrity="sha512-6lplKUSl86rUVprDIjiW8DuOniNX8UDoRATqZSds/7t6zCQZfaCe3e5zcGaQwxa8Kpn5RTM9Fvl3X2lLV4grPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="index.js"></script>
+    <script>
+        var TAB;
+        function openTab(evt, name) {
+            TAB = name
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+              tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+              tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(name).style.display = "block";
+            evt.currentTarget.className += " active";
+          }
+    </script>
 </html>

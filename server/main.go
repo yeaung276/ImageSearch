@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"net/http"
 	"os"
 	"strconv"
 
@@ -38,12 +37,7 @@ func main() {
 			return
 		}
 	}()
-	go func() {
-		if err := svc.ServeHttp(ctx); err != nil {
-			log.Fatal("Fail to server http server")
-		}
-	}()
-	log.Print("Serving file server at port 9000")
-	fs := http.FileServer(http.Dir("../jsmodel"))
-	log.Fatal(http.ListenAndServe(":9000", fs))
+	if err := svc.ServeHttp(ctx); err != nil {
+		log.Fatal("Fail to server http server")
+	}
 }
