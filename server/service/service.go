@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -10,6 +11,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/cors"
 	"github.com/yeaung276/ImageSearch/server/milvus"
@@ -91,6 +93,11 @@ func (s *Service) Shutdown(ctx context.Context) error {
 	return nil
 }
 
+// File upload
+type fileResponse struct {
+	FileUrl string
+}
+
 func uploadFile(w http.ResponseWriter, r *http.Request, params map[string]string) {
 	//upload size
 	err := r.ParseForm() // grab the multipart form
@@ -99,14 +106,14 @@ func uploadFile(w http.ResponseWriter, r *http.Request, params map[string]string
 		return
 	}
 
-	f, header, err := r.FormFile("attachment")
+	f, _, err := r.FormFile("attachment")
 	if err != nil {
 		http.Error(w, fmt.Sprintf("failed to get file 'attachment': %s", err.Error()), http.StatusBadRequest)
 		return
 	}
 	defer f.Close()
-
-	resFile, err := os.Create("/upload/" + header.Filename)
+	fileName := "/images/" + uuid.New().String()
+	resFile, err := os.Create(fileName)
 	if err != nil {
 		fmt.Fprintln(w, err)
 	}
@@ -114,6 +121,10 @@ func uploadFile(w http.ResponseWriter, r *http.Request, params map[string]string
 	if err == nil {
 		io.Copy(resFile, f)
 		defer resFile.Close()
-		fmt.Fprintf(w, "Successfully Uploaded Original File\n")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(fileResponse{
+			FileUrl: fileName,
+		})
 	}
 }

@@ -3,6 +3,7 @@ module github.com/yeaung276/ImageSearch/server
 go 1.20
 
 require (
+	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.2
 	github.com/milvus-io/milvus-sdk-go/v2 v2.2.7
 	github.com/rs/cors v1.9.0

@@ -126,7 +126,7 @@ func (m *MilvusDB) DropCollection(ctx context.Context) error {
 func (m *MilvusDB) AddImageVector(ctx context.Context, url string, vector []float32) error {
 	vects := make([][]float32, 0, 1)
 	vects = append(vects, vector)
-	vectorColumn := entity.NewColumnFloatVector("vector", 2, vects)
+	vectorColumn := entity.NewColumnFloatVector("vector", m.vectorSize, vects)
 	urlColumn := entity.NewColumnVarChar("url", []string{url})
 	_, err := m.c.Insert(ctx, m.collectionName, "", vectorColumn, urlColumn)
 	if err != nil {
