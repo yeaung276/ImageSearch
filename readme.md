@@ -53,12 +53,13 @@ Before you begin, ensure you have the following installed:
 This will set up all the necessary components, including the backend, Malvus vector DB, and Nginx, and make them ready for use.
 
 ## Usage
+![client](https://github.com/yeaung276/ImageSearch/blob/91bab8728fd696cb854ea5ed4246edb716be3fc6/docs/screenshot-web.png)
 Once the project is up and running, you can access the reverse image search application through your web browser. The web client will allow you to upload an image, and the system will search for similar images based on the features extracted by the Inception V3 model. The Golang-based backend and Vector DB handles the encoding, search, and retrieval of images efficiently.
 ###### http client: `localhost`
 ###### db interface: `localhost:8000`
-![client](https://github.com/yeaung276/ImageSearch/blob/91bab8728fd696cb854ea5ed4246edb716be3fc6/docs/screenshot-web.png)
-## Architecture
 
+## Architecture
+![architecture](https://github.com/yeaung276/ImageSearch/blob/e10a3e810d28e58d4f52935106b99d452ebfc1d0/docs/Architecture.png)
 The Reverse Image Search project comprises the following key components:
 
 - **Web Client (TensorFlow.js)**: This is the client-side application that runs in the user's web browser. It enables users to upload images and get encodings for reverse image searches.
@@ -72,7 +73,7 @@ The Reverse Image Search project comprises the following key components:
 - **Docker**: This project use docker for managing dependencies components.
 
 This architectural design enables efficient image searches and provides a robust foundation for the Reverse Image Search project.
-![architecture](https://github.com/yeaung276/ImageSearch/blob/e10a3e810d28e58d4f52935106b99d452ebfc1d0/docs/Architecture.png)
+
 ## License
 
 This project is licensed under the **MIT License**. Feel free to use, modify, and distribute it according to the terms of the license.
