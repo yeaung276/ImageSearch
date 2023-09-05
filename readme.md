@@ -72,6 +72,7 @@ The Reverse Image Search project comprises the following key components:
 - **Docker**: This project use docker for managing dependencies components.
 
 This architectural design enables efficient image searches and provides a robust foundation for the Reverse Image Search project.
+![architecture](https://github.com/yeaung276/ImageSearch/blob/e10a3e810d28e58d4f52935106b99d452ebfc1d0/docs/Architecture.png)
 ## License
 
 This project is licensed under the **MIT License**. Feel free to use, modify, and distribute it according to the terms of the license.
