@@ -56,6 +56,7 @@ This will set up all the necessary components, including the backend, Malvus vec
 Once the project is up and running, you can access the reverse image search application through your web browser. The web client will allow you to upload an image, and the system will search for similar images based on the features extracted by the Inception V3 model. The Golang-based backend and Vector DB handles the encoding, search, and retrieval of images efficiently.
 ###### http client: `localhost`
 ###### db interface: `localhost:8000`
+![client](https://github.com/yeaung276/ImageSearch/blob/91bab8728fd696cb854ea5ed4246edb716be3fc6/docs/screenshot-web.png)
 ## Architecture
 
 The Reverse Image Search project comprises the following key components:
